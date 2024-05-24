@@ -49,7 +49,7 @@ int main(void) {
     scd4x_wake_up();
     scd4x_stop_periodic_measurement();
     scd4x_reinit();
-
+    setbuf(stdout, NULL);
     uint16_t serial_0;
     uint16_t serial_1;
     uint16_t serial_2;
@@ -71,17 +71,9 @@ int main(void) {
     printf("Waiting for first measurement... (5 sec)\n");
 
     for (;;) {
-        // Read Measurement if data is available
-        bool data_ready_flag = false;
-        sensirion_i2c_hal_sleep_usec(100000);
-        error = scd4x_get_data_ready_flag(&data_ready_flag);
-        if (error) {
-            printf("Error executing scd4x_get_data_ready_flag(): %i\n", error);
-            continue;
-        }
-        if (!data_ready_flag) {
-            continue;
-        }
+        // Read Measurement
+        sensirion_i2c_hal_sleep_usec(5000000);
+
         uint16_t co2;
         float temperature;
         float humidity;
